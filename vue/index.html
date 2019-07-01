@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>COFFEE</h1>
+    </header>
+    <div id="app">
+        <section class="search-section">
+            <form class="container" v-on:submit.prevent="onSubmit">
+                <input class="item item__input" v-model="query"  type="text">
+                <button type="reset" v-on:click="resetForm" v-show="query.length">x</button>
+                <button class="hidden item item__search">
+                    검색
+                </button>
+                <!-- <div class="closePosition close" v-show="query.length" v-on:input="closeAni"></div> -->
+            </form>
+        </section>
+        <section class="searchList-section">
+            <!-- <div class="tab-container">
+                <div class="tab tab__dp_selected" data-tab="tabList-com">추천검색어</div>
+                <div class="tab" data-tab="tabList-recent">최근검색어</div>
+            </div> -->
+            <div>
+                <ul class="tab-container">
+                    <li class="tab" v-for="tab in tabs" v-on:click="onClickTab(tab)" v-bind:class="{tab__dp_selected : tab===selectedTab}">
+                        {{tab}}
+                    </li>
+                </ul>
+            </div>
+            <div v-if="tabRec.length">
+                <ul v-if="selectedTab==tabs[0]">
+                    <li v-for="item in tabRec">
+                        <a v-on:click="renderResult(item.keyword)">{{item.keyword}}</a>
+                    </li>
+                </ul>
+                <ul v-if="selectedTab==tabs[1]">
+                    <li v-for="item in tabRec">
+                        <a v-on:click="renderResult(item.keyword)">{{item.keyword}}</a>
+                        <i v-on:click="removeTabList(item.keyword, selectedTab)">&#x274C;</i>
+                    </li>
+                </ul>
+            </div>
+            <div v-else>
+                {{selectedTab}}가 없습니다
+            </div>
+            <!-- <ul class="tabList-com tabList tabList__dp_selected">
+            </ul>
+            <ul class="tabList-recent tabList">
+            </ul> -->
+        </section>
+        <section class="productList-section">
+            <ul v-show="query.length">
+                <li v-for="result in resultData">
+                    <img v-bind:src="result.image" alt="">
+                    <p>{{result.name}}</p>
+                </li>
+            </ul>
+        </section>
+        <section class="productList-section1">
+        </section>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script type="module" src="./app.js"></script>
+</body>
+
+</html>
