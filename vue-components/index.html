@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VUE</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1><img src="./images/logo.png" alt=""></h1>
+    </header>
+    <div id="app">
+        <formsearch v-bind:value="query" v-on:@submit="onSubmit" v-on:@reset="removeResult"></formsearch>
+        <tabkeyword v-on:@click="onClickRec"></tabkeyword>
+        <resultvalue v-bind:data="resultData"></resultvalue>
+    </div>
+    <script src="https://unpkg.com/vue"></script>
+    <script type="module" src="./app.js"></script>
+
+</body>
+</html>
+<template id="formSearch">
+    <section class="search-section">
+        <form class="container" v-on:submit.prevent="onSubmit">
+            <input class="item item__input" v-model="inputValue"  type="text" placeholder="검색어를 입력하세요">
+            <button class="close" type="reset" v-on:click="resetForm" v-show="inputValue.length"></button>
+            <button class="item item__search" v-on:click="onSubmit">
+                <img src="./images/search.png" alt="">
+            </button>
+            <!-- <div class="closePosition close" v-show="query.length" v-on:input="closeAni"></div> -->
+        </form>
+    </section>
+</template>
+<template id="tabKeyword">
+    <section class="searchList-section">
+        <ul class="tab-container">
+            <li class="tab" v-for="tab in tabs" v-on:click="onClickTab(tab)" v-bind:class="{tab__dp_selected : tab===selectedTab}">
+                {{tab}}
+            </li>
+        </ul>
+        <div v-if="tabRec.length">
+            <ul class="tabListUi" v-if="selectedTab==tabs[0]">
+                <li class="tabList-com tabList" v-for="item in tabRec">
+                    <a v-on:click="onClickRec(item.keyword)">{{item.keyword}}</a>
+                </li>
+            </ul>
+            <ul class="tabListUi" v-if="selectedTab==tabs[1]">
+                <li class="tabList-recent tabList" v-for="item in tabRec">
+                    <a v-on:click="onClickRec(item.keyword)">{{item.keyword}}</a>
+                    <i class="li-close" v-on:click="removeTabList(item.keyword, selectedTab)">&#x274C;</i>
+                </li>
+            </ul>
+        </div>
+        <div v-else>
+            {{selectedTab}}가 없습니다
+        </div>
+    </section>
+</template>
+<template id="resultValue">
+    <section class="productList-section">
+        <ul v-show="resultValue.length">
+            <li v-for="result in resultValue">
+                <img v-bind:src="result.image" alt="">
+                <p>{{result.name}}</p>
+            </li>
+        </ul>
+    </section>
+</template>
